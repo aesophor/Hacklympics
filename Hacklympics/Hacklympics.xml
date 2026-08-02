@@ -6,7 +6,19 @@
     <property name="dir.buildfile" value="."/>
     <property name="dir.workspace" value="${dir.buildfile}/.."/>
     <property name="dir.jarfile" value="${dir.buildfile}/dist"/>
-    <target name="create_run_jar">
+    <target name="compile">
+        <mkdir dir="${dir.buildfile}/bin"/>
+        <javac srcdir="${dir.buildfile}/src" destdir="${dir.buildfile}/bin" includeantruntime="false">
+            <classpath>
+                <fileset dir="${dir.buildfile}/libs" includes="*.jar"/>
+                <fileset dir="${dir.workspace}/HacklympicsAPI/dist" includes="*.jar"/>
+            </classpath>
+        </javac>
+        <copy todir="${dir.buildfile}/bin">
+            <fileset dir="${dir.buildfile}/src" excludes="**/*.java"/>
+        </copy>
+    </target>
+    <target name="create_run_jar" depends="compile">
         <jar destfile="${dir.jarfile}/Hacklympics.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="com.hacklympics.main.Main"/>
